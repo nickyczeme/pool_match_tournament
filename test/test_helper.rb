@@ -1,6 +1,10 @@
 ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
+require 'sqlite3'
+
+DB = SQLite3::Database.new('db/test.sqlite3')
+DB.results_as_hash = true
 
 Rails.application.config.active_record.migration_error = false
 Rails.application.config.active_record.schema_format = :sql
