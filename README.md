@@ -1,24 +1,36 @@
-# README
+# Pool Match & Tournament Manager
+This application is a service where users can schedule pool matches, track ongoing games and record results. It uses Ruby, SQLite and direct SQL queries.
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Requierements 
+- Ruby (version >= 3.1.0)
+- SQLite3
 
-Things you may want to cover:
+## Setup Instructions 
+### 1. Clone the Repository
+```bash
+git clone https://github.com/nickyczeme/pool_match_tournament/
+cd pool_match_tournament
+```
+### 2. Install dependecies
+```bash
+bundle install
+```
+### 3. Configure databases
 
-* Ruby version
+This project uses two databases:
+- ```development.sqlite3``` for development
+  - To setup the development database:  ```ruby setup-db.rb ```
+- ```test.sqlite3``` for testing
+  - To setup the test database:  ```ruby setup-db.rb db/test.sqlite3```
 
-* System dependencies
+### 4. Start the application 
+```bash
+rails server
+```
+Server available at ```http://localhost:3000```
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## Testing 
+To run the tests run: 
+```bash
+rails test
+```
