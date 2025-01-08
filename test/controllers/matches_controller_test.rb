@@ -179,4 +179,35 @@ class MatchesControllerTest < ActionDispatch::IntegrationTest
     puts "Matches Date Filter: #{matches}"
     assert_equal 3, matches.length
   end
+
+  test "should update player rankings after match is completed" do
+    # Completar un partido y declarar un ganador
+    get "/matches/1"
+    assert_response :success
+    body = JSON.parse(@response.body)
+    player_id_1 = body["player1_id"]
+    player_id_2 =  body["player2_id"]
+
+    player1 = DB.execute("SELECT * FROM players WHERE id = ?", player_id_1).first
+    player2 = DB.execute("SELECT * FROM players WHERE id = ?", player_id_2).first
+
+    ranking_before_winner_player_1 = player1['ranking']
+    ranking_before_winner_player_2 = player2['ranking']
+
+    put "/matches/1", params: {
+      match: {
+        end_time: "2025-01-04 16:00:00",
+        winner_id: player_id_1
+      }
+    }
+    assert_response :success
+    body = JSON.parse(@response.body)
+    assert_equal "Match updated successfully", body["message"]
+
+    player1 = DB.execute("SELECT * FROM players WHERE id = ?", player_id_1).first
+    player2 = DB.execute("SELECT * FROM players WHERE id = ?", player_id_2).first
+  
+    assert_equal 1, player1["ranking"] - ranking_before_winner_player_1
+    assert_equal 1, ranking_before_winner_player_2 - player2["ranking"]
+  end  
 end

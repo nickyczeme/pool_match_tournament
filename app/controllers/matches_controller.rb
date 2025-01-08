@@ -119,6 +119,9 @@ class MatchesController < ApplicationController
         render json: { error: "Winner must be either Player 1 or Player 2" }, status: :unprocessable_entity
         return
       end
+
+      loser_id = (winner_id == player1_id) ? player2_id : player1_id
+      update_player_stats(winner_id, loser_id)
     end
 
     start_time = params[:match][:start_time] || match["start_time"]
@@ -178,5 +181,10 @@ class MatchesController < ApplicationController
     params << exclude_match_id if exclude_match_id
   
     DB.execute(query, *params).first
+  end
+
+  def update_player_stats(winner_id, loser_id)
+    DB.execute("UPDATE players SET ranking = ranking + 1 WHERE id = ?", winner_id)
+    DB.execute("UPDATE players SET ranking = ranking - 1 WHERE id = ?", loser_id)
   end
 end
