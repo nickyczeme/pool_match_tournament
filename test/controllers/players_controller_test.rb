@@ -4,6 +4,8 @@ class PlayersControllerTest < ActionDispatch::IntegrationTest
   setup do
     @player = { name: "John", ranking: 10, preferred_cue: "Cue 1" }
     DB.execute("DELETE FROM players")
+    sql = File.read('setup.sql')
+    DB.execute_batch(sql)
     DB.execute("INSERT INTO players (id, name, ranking, preferred_cue) VALUES (1, 'John', 10, 'Cue 1')")
     DB.execute("INSERT INTO players (id, name, ranking, preferred_cue) VALUES (2, 'Jane', 20, 'Cue 2')")
     DB.execute("INSERT INTO players (id, name, ranking, preferred_cue) VALUES (3, 'Johnny', 30, 'Cue 1')")
